@@ -1,7 +1,5 @@
 (use jaylib)
 
-(def *config-file-name* "config.ini")
-
 (init-window 600 480 "Testulon")
 (set-target-fps 60)
 (hide-cursor)
