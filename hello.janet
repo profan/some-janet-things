@@ -18,6 +18,10 @@
   [[x y] s]
   [(/ x s) (/ y s)])
 
+(defn v/mul
+  [[x y] s]
+  [(* x s) (* y s)])
+
 (defn v/length
   [[x y]]
   (math/sqrt (+ (* x x) (* y y))))
@@ -27,10 +31,10 @@
   (v/div v (v/length v)))
 
 (defmacro v/+= [n v]
-  ~(set ,n (v/+ ,v)))
+  ~(set ,n (v/+ ,n ,v)))
 
 (defmacro v/-= [n v]
-  ~(set ,n (v/- ,v)))
+  ~(set ,n (v/- ,n ,v)))
 
 (defn get-force-to-apply
   [p m t]
