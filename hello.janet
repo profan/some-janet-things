@@ -81,6 +81,8 @@
 (var current-tile-min-time 0.25)
 (var current-tile-max-time 0.75)
 
+(var secondary-tile-timer 0.0)
+
 (var current-brush-size (* *grid-tile-size* 4))
 (def grid @{})
 
@@ -103,7 +105,7 @@
     (draw-rectangle x y *grid-tile-size* *grid-tile-size* current-colour)
 
     (-= (entry :time) (* dt 0.25))
-    (set (entry :time) (max (entry :time) 0))
+    (set (entry :time) (max (entry :time) 1.0))
     # (draw-text (string (entry :time)) x y 12.0 :white)
 
     # (def mid (v/- [x y] [*grid-tile-size* *grid-tile-size*]))
@@ -119,6 +121,23 @@
     # (set (entry :time) (max (entry :time) 0))
     ) 
   
+  (defn find-minimum-tile []
+
+    (var has-found-min? false)
+    (var smallest-time ((first grid) :time))
+    (var smallest-entry (first grid)) 
+    (var smallest-pos [0 0])
+
+    (loop [[grid-pos entry] :in (pairs grid)]
+      (def time (entry :time))
+      (when (< time smallest-time)
+        (set smallest-time time)
+        (set smallest-pos grid-pos)
+        (set smallest-entry entry)))
+    
+   [smallest-pos smallest-entry])
+      
+
   (defn paint-tile [c-x c-y current-paint-speed is-painting?]
     (def [g-x g-y] (v/div [c-x c-y] *grid-tile-size*))
     (def [t-x t-y] (v/mul (v/round (v/div [g-x g-y] *grid-tile-chunk-size*)) *grid-tile-chunk-size*))
@@ -148,7 +167,14 @@
     (def new-random-y (math/round (* (math/random) (- *window-size-h* 1))))
     (def new-random-tile [new-random-x new-random-y])
     (paint-tile new-random-x new-random-y 64.0 true)
+    (set secondary-tile-timer (* new-random-time 2.0))
     (set current-tile-timer new-random-time))
+  
+  (when (<= secondary-tile-timer 0.0)
+    (def (entry-pos entry) (find-minimum-tile))
+    (def [x y] (v/mul entry-pos *grid-tile-size*))
+    (paint-tile x y 64.0 true)
+    (set secondary-tile-timer 0.0))
   
   (-= current-tile-timer dt)
 
