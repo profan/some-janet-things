@@ -45,11 +45,6 @@
     (min 1.0 (lerp (2 a) (2 b) t))
     (min 1.0 (lerp (3 a) (3 b) t))])
 
-(defn get-force-to-apply [p m t]
-  (def d (v/- p m))
-  (def f (v/normalize d))
-  f)
-
 (def *window-size-w* 640)
 (def *window-size-h* 640)
 
