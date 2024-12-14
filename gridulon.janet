@@ -54,7 +54,6 @@
   (def target-random-b (+ (/ x grid-size) (/ (math/random) 32.0)))
   (def target-colour [target-random-r target-random-g target-random-b 1.0])
   (def final-target-colour (lerp-colour target-colour [1.0 1.0 1.0 1.0] 0.5))
-  # (def target-colour (+ colour (* (- (math/random) 0.5) 2.0)))
   @{:start-colour colour
     :end-colour final-target-colour
     :time 0.0})
@@ -130,7 +129,6 @@
     (for cur-x start-x target-x
       (for cur-y start-y target-y
         (def entry (grid [cur-x cur-y]))
-
         (when (and is-painting? (not (nil? entry)))
           (+= (entry :time) (* dt current-paint-speed))))))
 
