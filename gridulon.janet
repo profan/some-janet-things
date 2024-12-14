@@ -30,14 +30,14 @@
 (defmacro v/-= [n v]
   ~(set ,n (v/- ,n ,v)))
 
-(defmacro v/mul= [n s] 
+(defmacro v/mul= [n s]
   ~(set ,n (v/mul ,n ,s)))
 
 (defmacro v/div= [n s]
   ~(set ,n (v/div ,n ,s)))
 
 (defn lerp [a b t]
- (+ (* a (- 1.0 t)) (* b t))) 
+ (+ (* a (- 1.0 t)) (* b t)))
 
 (defn lerp-colour [a b t]
   [(min 1.0 (lerp (0 a) (0 b) t))
@@ -105,27 +105,13 @@
     (draw-rectangle x y *grid-tile-size* *grid-tile-size* current-colour)
 
     (-= (entry :time) (* dt 0.25))
-    (set (entry :time) (max (entry :time) 1.0))
-    # (draw-text (string (entry :time)) x y 12.0 :white)
+    (set (entry :time) (max (entry :time) 1.0)))
 
-    # (def mid (v/- [x y] [*grid-tile-size* *grid-tile-size*]))
-    # (def current-paint-multiplier (/ (v/length (v/- [m-x m-y] mid)) current-brush-size))
-
-    # (def has-overlap?
-    #   (check-collision-circle-rec [m-x m-y] current-brush-size [x y *grid-tile-size* *grid-tile-size*]))
-
-    # (if (and has-overlap? is-painting?)
-    #   (+= (entry :time) (* dt (* current-paint-speed current-paint-multiplier)))
-    #   (-= (entry :time) (* dt 0.25)))
-
-    # (set (entry :time) (max (entry :time) 0))
-    ) 
-  
   (defn find-minimum-tile []
 
     (var has-found-min? false)
     (var smallest-time ((first grid) :time))
-    (var smallest-entry (first grid)) 
+    (var smallest-entry (first grid))
     (var smallest-pos [0 0])
 
     (loop [[grid-pos entry] :in (pairs grid)]
@@ -134,9 +120,8 @@
         (set smallest-time time)
         (set smallest-pos grid-pos)
         (set smallest-entry entry)))
-    
+
    [smallest-pos smallest-entry])
-      
 
   (defn paint-tile [c-x c-y current-paint-speed is-painting?]
     (def [g-x g-y] (v/div [c-x c-y] *grid-tile-size*))
@@ -169,13 +154,13 @@
     (paint-tile new-random-x new-random-y 64.0 true)
     (set secondary-tile-timer (* new-random-time 2.0))
     (set current-tile-timer new-random-time))
-  
+
   (when (<= secondary-tile-timer 0.0)
     (def (entry-pos entry) (find-minimum-tile))
     (def [x y] (v/mul entry-pos *grid-tile-size*))
     (paint-tile x y 64.0 true)
     (set secondary-tile-timer 0.0))
-  
+
   (-= current-tile-timer dt)
 
   (draw-circle-lines m-x m-y 4.0 0x428bcaff)
